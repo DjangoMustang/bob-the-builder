@@ -1,4 +1,4 @@
-/ 
+/** 
     window.onload = function () {
     let heart = document.getElementById('heart');
     let bob = document.getElementById('bob');
