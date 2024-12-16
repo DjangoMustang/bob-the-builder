@@ -51,10 +51,10 @@
     <div class="message">Building Love, Just For You! ❤️</div>
     <div class="container">
         <div class="canvas-container">
-              <div class="bob-container" id="bobContainer">
+            <canvas id="heartCanvas" width="400" height="400"></canvas>
+            <div class="bob-container" id="bobContainer">
                 <img src="./bob-the-builder.gif" alt="Bob the Builder" class="bob-gif" id="bobGif">
             </div>
-            <canvas id="heartCanvas" width="400" height="400"></canvas>
         </div>
     </div>
 
@@ -69,15 +69,15 @@
         const brickHeight = 10;
         const brickColors = ['#ff6b6b', '#ff8585', '#ff9999', '#ff4d4d'];
         
+        // Function to move Bob
         function moveBobToBrick(brick) {
-        // Calculate position relative to canvas container
+            // Calculate position relative to canvas container
             const x = brick.x - 50; // Center Bob (half of Bob's width)
             const y = brick.y - 50; // Center Bob (half of Bob's height)
-    
-        // Ensure Bob doesn't go too far off-screen
+            
+            // Update Bob's position with transform
             bobContainer.style.transform = `translate(${x}px, ${y}px)`;
-            }    
-    
+        }
 
         class Brick {
             constructor(x, y, row) {
