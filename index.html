@@ -13,12 +13,12 @@
             position: relative;
         }
         .bob-container {
-            width: 100px;  /* Made Bob smaller */
+            width: 100px;
             height: 100px;
             position: absolute;
             transition: all 0.3s ease;
             z-index: 2;
-            pointer-events: none; /* Prevents Bob from interfering with interactions */
+            pointer-events: none;
         }
         .bob-gif {
             width: 100%;
@@ -64,31 +64,27 @@
         const bobContainer = document.getElementById('bobContainer');
         const canvasContainer = document.querySelector('.canvas-container');
         
-        // LEGO brick properties
         const brickWidth = 20;
         const brickHeight = 10;
         const brickColors = ['#ff6b6b', '#ff8585', '#ff9999', '#ff4d4d'];
         
         // Function to move Bob
         function moveBobToBrick(brick) {
-            // Calculate position relative to canvas container
-            const x = brick.x - 50; // Center Bob (half of Bob's width)
-            const y = brick.y - 50; // Center Bob (half of Bob's height)
-            
-            // Update Bob's position with transform
+            const x = brick.x - 50;
+            const y = brick.y - 50;
             bobContainer.style.transform = `translate(${x}px, ${y}px)`;
         }
 
         class Brick {
-            constructor(x, y, row) {
+            constructor(x, y) {
                 this.x = x;
                 this.y = y;
-                this.row = row;
                 this.color = brickColors[Math.floor(Math.random() * brickColors.length)];
+                this.velocity = 2 + Math.random() * 2; // Falling speed
                 this.scale = 0;
                 this.built = false;
             }
-            
+
             draw() {
                 if (this.scale < 1) {
                     this.scale += 0.1;
@@ -98,28 +94,28 @@
                 ctx.translate(this.x, this.y);
                 ctx.scale(this.scale, this.scale);
                 
-                // Main brick body
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
                 ctx.roundRect(-brickWidth/2, -brickHeight/2, brickWidth, brickHeight, 2);
                 ctx.fill();
                 
-                // Brick studs
                 ctx.fillStyle = '#ff3333';
                 ctx.beginPath();
                 ctx.arc(-5, -brickHeight/2, 2, 0, Math.PI * 2);
                 ctx.arc(5, -brickHeight/2, 2, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // Brick shadow
                 ctx.fillStyle = 'rgba(0,0,0,0.1)';
                 ctx.fillRect(-brickWidth/2, brickHeight/3, brickWidth, brickHeight/6);
                 
                 ctx.restore();
             }
+
+            fall() {
+                this.y += this.velocity; // Make the brick fall
+            }
         }
 
-        // Create heart shape
         function isInHeart(x, y) {
             const nx = (x - canvas.width/2) / 100;
             const ny = -(y - canvas.height/2) / 100;
@@ -127,69 +123,54 @@
             return heart <= 1.3;
         }
 
-        // Create bricks array
         const bricks = [];
         for (let row = 0; row < canvas.height; row += brickHeight) {
             for (let col = 0; col < canvas.width; col += brickWidth) {
                 if (isInHeart(col, row)) {
-                    bricks.push(new Brick(col, row, row));
+                    bricks.push(new Brick(col, row));
                 }
             }
         }
         
-        // Sort bricks from bottom to top
-        bricks.sort((a, b) => b.row - a.row);
+        // Sort bricks from top to bottom (since they're falling from the sky)
+        bricks.sort((a, b) => a.y - b.y);
         
-        // Animation variables
         let currentBrick = 0;
-        let buildDelay = 50;
-        let lastBuildTime = 0;
-
-        // Animation loop
+        let lastFallTime = 0;
+        
         function animate(timestamp) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Build new brick if enough time has passed
-            if (timestamp - lastBuildTime > buildDelay && currentBrick < bricks.length) {
-                bricks[currentBrick].built = true;
+
+            if (currentBrick < bricks.length) {
+                // Let bricks fall
+                const brick = bricks[currentBrick];
+                brick.fall();
                 
-                // Move Bob to current brick position
-                moveBobToBrick(bricks[currentBrick]);
-                
-                currentBrick++;
-                lastBuildTime = timestamp;
+                // Move Bob to the current brick's position
+                moveBobToBrick(brick);
+
+                if (brick.y >= canvas.height - 50) {
+                    // Once the brick reaches the bottom, it stops falling and starts "building"
+                    brick.built = true;
+                    currentBrick++;
+                }
             }
-            
-            // Draw built bricks
-            for (let i = 0; i < currentBrick; i++) {
-                bricks[i].draw();
-            }
-            
-            // Sparkle effect at current building position
-            if (currentBrick > 0 && currentBrick < bricks.length) {
-                drawSparkle(bricks[currentBrick-1].x, bricks[currentBrick-1].y, timestamp);
-            }
-            
-            // Celebration effects when complete
+
+            // Draw the falling bricks
+            bricks.forEach((brick, index) => {
+                if (!brick.built) {
+                    brick.draw();
+                }
+            });
+
+            // Celebration when all bricks are built
             if (currentBrick === bricks.length) {
                 drawLoveParticles(timestamp);
-                // Move Bob to final center position
-                moveBobToBrick({x: canvas.width/2, y: canvas.height - 50});
             }
             
             requestAnimationFrame(animate);
         }
-        
-        // Sparkle effect
-        function drawSparkle(x, y, timestamp) {
-            const sparkleSize = 2 + Math.sin(timestamp/200) * 1;
-            ctx.fillStyle = '#fff';
-            ctx.beginPath();
-            ctx.arc(x, y, sparkleSize, 0, Math.PI * 2);
-            ctx.fill();
-        }
-        
-        // Love particles effect
+
         const particles = [];
         function drawLoveParticles(timestamp) {
             if (Math.random() < 0.1) {
@@ -212,11 +193,8 @@
             });
         }
 
-        // Start animation when page loads
         window.addEventListener('load', () => {
-            // Position Bob at starting position (bottom center)
             moveBobToBrick({x: canvas.width/2, y: canvas.height + 25});
-            // Start animation
             animate(0);
         });
     </script>
