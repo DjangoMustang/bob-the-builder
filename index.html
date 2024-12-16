@@ -3,104 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lego Heart Builder</title>
-    <style>
-        body {
-            margin: 0;
-            background: #fbeaec;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            font-family: 'Arial', sans-serif;
-        }
-
-        #container {
-            position: relative;
-            width: 300px;
-            height: 300px;
-        }
-
-        .block {
-            width: 50px;
-            height: 50px;
-            background: #FF4081;
-            position: absolute;
-            border-radius: 5px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            transform: scale(0.8);
-        }
-
-        @keyframes appear {
-            0% {
-                opacity: 0;
-                transform: scale(0.5);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        #builder {
-            position: absolute;
-            width: 80px;
-            height: auto;
-            transition: all 0.5s ease;
-            z-index: 10;
-        }
-
-        #message {
-            position: absolute;
-            bottom: -50px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1.8em;
-            color: #FF4081;
-            opacity: 0;
-            animation: showMessage 1s ease-out forwards 6s;
-        }
-
-        @keyframes showMessage {
-            0% {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+    <title>Bob the Builder Builds a Heart</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="container">
-        <img id="builder" src="bob-the-builder.gif" alt="Bob the Builder">
-        <!-- Heart Blocks -->
-        <div class="block" style="top: 50px; left: 75px;"></div>
-        <div class="block" style="top: 50px; left: 175px;"></div>
-        <div class="block" style="top: 100px; left: 50px;"></div>
-        <div class="block" style="top: 100px; left: 125px;"></div>
-        <div class="block" style="top: 100px; left: 200px;"></div>
-        <div class="block" style="top: 150px; left: 50px;"></div>
-        <div class="block" style="top: 150px; left: 125px;"></div>
-        <div class="block" style="top: 150px; left: 200px;"></div>
-        <div class="block" style="top: 200px; left: 75px;"></div>
-        <div class="block" style="top: 200px; left: 175px;"></div>
-        <div id="message">You complete my heart!</div>
+    <div class="container">
+        <div class="heart-container">
+            <img id="legoHeart" src="lego-heart-step1.png" alt="Lego Heart" />
+        </div>
+        <div class="bob-container">
+            <img id="bob" src="bob-the-builder.gif" alt="Bob the Builder" />
+        </div>
     </div>
-
-    <script>
-        const builder = document.getElementById('builder');
-        const blocks = document.querySelectorAll('.block');
-        let index = 0;
-
-        function moveBuilder() {
-            if (index < blocks.length) {
-                const block = blocks[index];
-                builder.style.top = block.style.top;
-                builder.style.left = block.style.left;
-
-                // Delay block animation until Bob 
+    <script src="script.js"></script>
+</body>
+</html>
