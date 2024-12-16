@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEGO Heart by Bob</title>
+    <style>
+        body {
+            margin: 0;
+            background: #fbeaec;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+
+        #container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+        }
+
+        #builder {
+            position: absolute;
+            bottom: 0;
+            left: -80px;
+            width: 100px;
+            animation: moveBob 5s ease-in-out infinite;
+        }
+
+        @keyframes moveBob {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(40px); }
+            100% { transform: translateX(0); }
+        }
+
+        #heart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 100px;
+            height: 100px;
+            animation: buildHeart 5s ease-in-out forwards;
+        }
+
+        @keyframes buildHeart {
+            0% { transform: translate(-50%, -50%) scale(0); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .message {
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5em;
+            color: #FF4081;
+            opacity: 0;
+            animation: showMessage 7s ease-in forwards;
+        }
+
+        @keyframes showMessage {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <img id="builder" src="bob-the-builder.gif" alt="Bob the Builder">
+        <div id="heart">❤️</div>
+        <div class="message">You complete my heart!</div>
+    </div>
+</body>
+</html>
