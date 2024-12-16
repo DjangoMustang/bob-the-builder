@@ -31,7 +31,6 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
             opacity: 0;
             transform: scale(0.8);
-            animation: appear 0.5s ease-out forwards;
         }
 
         @keyframes appear {
@@ -49,8 +48,8 @@
             position: absolute;
             width: 80px;
             height: auto;
+            transition: all 0.5s ease;
             z-index: 10;
-            transition: top 0.5s ease, left 0.5s ease;
         }
 
         #message {
@@ -61,7 +60,7 @@
             font-size: 1.8em;
             color: #FF4081;
             opacity: 0;
-            animation: showMessage 1s ease-out forwards 5s;
+            animation: showMessage 1s ease-out forwards 6s;
         }
 
         @keyframes showMessage {
@@ -78,24 +77,18 @@
 </head>
 <body>
     <div id="container">
-        <!-- Bob the Builder -->
         <img id="builder" src="bob-the-builder.gif" alt="Bob the Builder">
-
         <!-- Heart Blocks -->
-        <div class="block" style="top: 50px; left: 90px; animation-delay: 0.5s;"></div>
-        <div class="block" style="top: 50px; left: 160px; animation-delay: 1s;"></div>
-        <div class="block" style="top: 100px; left: 60px; animation-delay: 1.5s;"></div>
-        <div class="block" style="top: 100px; left: 120px; animation-delay: 2s;"></div>
-        <div class="block" style="top: 100px; left: 180px; animation-delay: 2.5s;"></div>
-        <div class="block" style="top: 100px; left: 240px; animation-delay: 3s;"></div>
-        <div class="block" style="top: 150px; left: 60px; animation-delay: 3.5s;"></div>
-        <div class="block" style="top: 150px; left: 120px; animation-delay: 4s;"></div>
-        <div class="block" style="top: 150px; left: 180px; animation-delay: 4.5s;"></div>
-        <div class="block" style="top: 150px; left: 240px; animation-delay: 5s;"></div>
-        <div class="block" style="top: 200px; left: 120px; animation-delay: 5.5s;"></div>
-        <div class="block" style="top: 200px; left: 180px; animation-delay: 6s;"></div>
-        
-        <!-- Message -->
+        <div class="block" style="top: 50px; left: 75px;"></div>
+        <div class="block" style="top: 50px; left: 175px;"></div>
+        <div class="block" style="top: 100px; left: 50px;"></div>
+        <div class="block" style="top: 100px; left: 125px;"></div>
+        <div class="block" style="top: 100px; left: 200px;"></div>
+        <div class="block" style="top: 150px; left: 50px;"></div>
+        <div class="block" style="top: 150px; left: 125px;"></div>
+        <div class="block" style="top: 150px; left: 200px;"></div>
+        <div class="block" style="top: 200px; left: 75px;"></div>
+        <div class="block" style="top: 200px; left: 175px;"></div>
         <div id="message">You complete my heart!</div>
     </div>
 
@@ -107,15 +100,7 @@
         function moveBuilder() {
             if (index < blocks.length) {
                 const block = blocks[index];
-                // Move builder to block's position
                 builder.style.top = block.style.top;
                 builder.style.left = block.style.left;
-                index++;
-                setTimeout(moveBuilder, 500);
-            }
-        }
 
-        moveBuilder();
-    </script>
-</body>
-</html>
+                // Delay block animation until Bob 
