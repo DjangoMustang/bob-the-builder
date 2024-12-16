@@ -3,71 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LEGO Heart Builder</title>
+    <title>Bob Builds a LEGO Heart</title>
     <style>
         body {
             margin: 0;
-            background: linear-gradient(to bottom, #fbeaec, #ffccd5);
+            background: linear-gradient(to bottom, #f9e9ec, #ffccd5);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             font-family: 'Arial', sans-serif;
-            overflow: hidden;
         }
 
-        #container {
+        #heart-container {
             position: relative;
-            width: 300px;
-            height: 300px;
+            width: 240px;
+            height: 240px;
         }
 
         .lego-brick {
             position: absolute;
-            width: 50px;
-            height: 25px;
-            background: #FF4081;
+            width: 40px;
+            height: 40px;
+            background: #ff1e56;
             border-radius: 4px;
             box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.2);
             transform: scale(0);
-            animation: buildBrick 0.8s forwards;
+            animation: popBrick 0.8s forwards;
         }
 
-        /* Heart Layout - Positions of the LEGO bricks */
-        .brick-1 { top: 50px; left: 75px; animation-delay: 0s; }
-        .brick-2 { top: 50px; left: 125px; animation-delay: 0.2s; }
-        .brick-3 { top: 75px; left: 50px; animation-delay: 0.4s; }
-        .brick-4 { top: 75px; left: 100px; animation-delay: 0.6s; }
-        .brick-5 { top: 75px; left: 150px; animation-delay: 0.8s; }
-        .brick-6 { top: 100px; left: 25px; animation-delay: 1s; }
-        .brick-7 { top: 100px; left: 75px; animation-delay: 1.2s; }
-        .brick-8 { top: 100px; left: 125px; animation-delay: 1.4s; }
-        .brick-9 { top: 100px; left: 175px; animation-delay: 1.6s; }
-        .brick-10 { top: 125px; left: 50px; animation-delay: 1.8s; }
-        .brick-11 { top: 125px; left: 100px; animation-delay: 2s; }
-        .brick-12 { top: 125px; left: 150px; animation-delay: 2.2s; }
-        .brick-13 { top: 150px; left: 75px; animation-delay: 2.4s; }
-        .brick-14 { top: 150px; left: 125px; animation-delay: 2.6s; }
+        /* Layout to create a heart shape */
+        .brick-1 { top: 0px; left: 80px; animation-delay: 0.1s; }
+        .brick-2 { top: 0px; left: 120px; animation-delay: 0.3s; }
+        .brick-3 { top: 40px; left: 40px; animation-delay: 0.5s; }
+        .brick-4 { top: 40px; left: 80px; animation-delay: 0.7s; }
+        .brick-5 { top: 40px; left: 120px; animation-delay: 0.9s; }
+        .brick-6 { top: 40px; left: 160px; animation-delay: 1.1s; }
+        .brick-7 { top: 80px; left: 0px; animation-delay: 1.3s; }
+        .brick-8 { top: 80px; left: 40px; animation-delay: 1.5s; }
+        .brick-9 { top: 80px; left: 80px; animation-delay: 1.7s; }
+        .brick-10 { top: 80px; left: 120px; animation-delay: 1.9s; }
+        .brick-11 { top: 80px; left: 160px; animation-delay: 2.1s; }
+        .brick-12 { top: 80px; left: 200px; animation-delay: 2.3s; }
+        .brick-13 { top: 120px; left: 40px; animation-delay: 2.5s; }
+        .brick-14 { top: 120px; left: 80px; animation-delay: 2.7s; }
+        .brick-15 { top: 120px; left: 120px; animation-delay: 2.9s; }
+        .brick-16 { top: 120px; left: 160px; animation-delay: 3.1s; }
+        .brick-17 { top: 160px; left: 80px; animation-delay: 3.3s; }
+        .brick-18 { top: 160px; left: 120px; animation-delay: 3.5s; }
 
-        #builder {
+        /* Bob the Builder GIF */
+        #bob-builder {
             position: absolute;
-            width: 80px;
+            width: 60px;
             height: auto;
             display: none;
             transition: all 0.4s ease;
         }
 
+        /* Completion message */
         .message {
             position: absolute;
-            top: 110%;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1.8em;
-            color: #FF4081;
+            top: 260px;
+            width: 100%;
+            text-align: center;
+            font-size: 1.5rem;
+            color: #ff1e56;
             opacity: 0;
+            transform: translateY(20px);
         }
 
-        @keyframes buildBrick {
+        @keyframes popBrick {
             0% { transform: scale(0); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
@@ -79,8 +85,8 @@
     </style>
 </head>
 <body>
-    <div id="container">
-        <!-- LEGO Heart Parts -->
+    <div id="heart-container">
+        <!-- LEGO Bricks for the Heart -->
         <div class="lego-brick brick-1"></div>
         <div class="lego-brick brick-2"></div>
         <div class="lego-brick brick-3"></div>
@@ -95,48 +101,5 @@
         <div class="lego-brick brick-12"></div>
         <div class="lego-brick brick-13"></div>
         <div class="lego-brick brick-14"></div>
-
-        <!-- Bob the Builder GIF -->
-        <img id="builder" src="bob-the-builder.gif" alt="Bob the Builder">
-
-        <!-- Message -->
-        <div class="message">You complete my heart!</div>
-    </div>
-
-    <script>
-        const bricks = document.querySelectorAll('.lego-brick');
-        const builder = document.getElementById('builder');
-        const message = document.querySelector('.message');
-
-        let currentBrick = 0;
-
-        function buildHeart() {
-            if (currentBrick < bricks.length) {
-                const brick = bricks[currentBrick];
-
-                // Reveal the brick with animation
-                brick.style.animationPlayState = 'running';
-
-                // Move Bob to the position of the current brick
-                const top = brick.style.top;
-                const left = brick.style.left;
-
-                builder.style.display = 'block';
-                builder.style.top = top;
-                builder.style.left = `${parseInt(left) - 15}px`; // Adjust left for alignment
-
-                // Move to the next brick after a short delay
-                currentBrick++;
-                setTimeout(buildHeart, 800);
-            } else {
-                // Hide Bob and show the final message
-                builder.style.display = 'none';
-                message.style.animation = 'showMessage 1s forwards';
-            }
-        }
-
-        // Start building the heart when the page loads
-        window.onload = buildHeart;
-    </script>
-</body>
-</html>
+        <div class="lego-brick brick-15"></div>
+        <div
