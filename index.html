@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LEGO Heart by Bob</title>
+    <title>LEGO Heart Builder</title>
     <style>
         body {
             margin: 0;
@@ -18,49 +18,33 @@
 
         #container {
             position: relative;
-            width: 400px;
-            height: 400px;
+            width: 300px;
+            height: 300px;
+        }
+
+        .heart-part {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: #FF4081;
+            opacity: 0;
         }
 
         #builder {
             position: absolute;
-            bottom: 0;
-            left: -80px;
-            width: 100px;
-            animation: moveBob 5s ease-in-out infinite;
-        }
-
-        @keyframes moveBob {
-            0% { transform: translateX(0); }
-            50% { transform: translateX(40px); }
-            100% { transform: translateX(0); }
-        }
-
-        #heart {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            width: 100px;
-            height: 100px;
-            animation: buildHeart 5s ease-in-out forwards;
-        }
-
-        @keyframes buildHeart {
-            0% { transform: translate(-50%, -50%) scale(0); }
-            50% { transform: translate(-50%, -50%) scale(1.1); }
-            100% { transform: translate(-50%, -50%) scale(1); }
+            width: 80px;
+            height: auto;
+            display: none;
         }
 
         .message {
             position: absolute;
-            top: 70%;
+            top: 110%;
             left: 50%;
             transform: translateX(-50%);
             font-size: 1.5em;
             color: #FF4081;
             opacity: 0;
-            animation: showMessage 7s ease-in forwards;
         }
 
         @keyframes showMessage {
@@ -71,9 +55,51 @@
 </head>
 <body>
     <div id="container">
+        <!-- LEGO Heart Parts -->
+        <div class="heart-part" style="top: 100px; left: 100px;"></div>
+        <div class="heart-part" style="top: 100px; left: 150px;"></div>
+        <div class="heart-part" style="top: 150px; left: 75px;"></div>
+        <div class="heart-part" style="top: 150px; left: 175px;"></div>
+        <div class="heart-part" style="top: 200px; left: 100px;"></div>
+        <div class="heart-part" style="top: 200px; left: 150px;"></div>
+
+        <!-- Bob the Builder GIF -->
         <img id="builder" src="bob-the-builder.gif" alt="Bob the Builder">
-        <div id="heart">❤️</div>
+
+        <!-- Message -->
         <div class="message">You complete my heart!</div>
     </div>
+
+    <script>
+        const heartParts = document.querySelectorAll('.heart-part');
+        const builder = document.getElementById('builder');
+        const message = document.querySelector('.message');
+
+        let currentPart = 0;
+
+        function buildHeart() {
+            if (currentPart < heartParts.length) {
+                const part = heartParts[currentPart];
+                // Position Bob the Builder
+                builder.style.display = 'block';
+                builder.style.top = `${part.style.top}`;
+                builder.style.left = `${parseInt(part.style.left) - 15}px`; // Adjust left for center alignment
+
+                // Reveal the current heart part
+                part.style.opacity = 1;
+
+                // Move to the next part after a short delay
+                currentPart++;
+                setTimeout(buildHeart, 800);
+            } else {
+                // Hide Bob and show the message
+                builder.style.display = 'none';
+                message.style.animation = 'showMessage 1s forwards';
+            }
+        }
+
+        // Start the heart-building animation
+        window.onload = buildHeart;
+    </script>
 </body>
 </html>
