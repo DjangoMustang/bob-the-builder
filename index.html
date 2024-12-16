@@ -10,15 +10,15 @@
             align-items: center;
             height: 100vh;
             background: #ffe6f2;
-            gap: 20px;
             position: relative;
         }
         .bob-container {
-            width: 150px;
-            height: 150px;
+            width: 100px;  /* Made Bob smaller */
+            height: 100px;
             position: absolute;
             transition: all 0.3s ease;
             z-index: 2;
+            pointer-events: none; /* Prevents Bob from interfering with interactions */
         }
         .bob-gif {
             width: 100%;
@@ -40,38 +40,45 @@
             color: #ff4d94;
             font-size: 24px;
         }
+        .canvas-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+        }
     </style>
 </head>
 <body>
     <div class="message">Building Love, Just For You! ❤️</div>
     <div class="container">
-        <div class="bob-container" id="bobContainer">
-            <img src="./bob-the-builder.gif" alt="Bob the Builder" class="bob-gif" id="bobGif">
+        <div class="canvas-container">
+            <canvas id="heartCanvas" width="400" height="400"></canvas>
+            <div class="bob-container" id="bobContainer">
+                <img src="./bob-the-builder.gif" alt="Bob the Builder" class="bob-gif" id="bobGif">
+            </div>
         </div>
-        <canvas id="heartCanvas" width="400" height="400"></canvas>
     </div>
 
     <script>
         const canvas = document.getElementById('heartCanvas');
         const ctx = canvas.getContext('2d');
         const bobContainer = document.getElementById('bobContainer');
-        
-        // Get canvas position for Bob's movement
-        const canvasRect = canvas.getBoundingClientRect();
+        const canvasContainer = document.querySelector('.canvas-container');
         
         // LEGO brick properties
         const brickWidth = 20;
         const brickHeight = 10;
         const brickColors = ['#ff6b6b', '#ff8585', '#ff9999', '#ff4d4d'];
         
-        // Create a grid of points for the heart shape
-        function isInHeart(x, y) {
-            const nx = (x - canvas.width/2) / 100;
-            const ny = -(y - canvas.height/2) / 100;
-            const heart = Math.pow(Math.pow(nx, 2) + Math.pow(ny - Math.sqrt(Math.abs(nx)), 2), 0.5);
-            return heart <= 1.3;
+        // Function to move Bob
+        function moveBobToBrick(brick) {
+            // Calculate position relative to canvas container
+            const x = brick.x - 50; // Center Bob (half of Bob's width)
+            const y = brick.y - 50; // Center Bob (half of Bob's height)
+            
+            // Update Bob's position with transform
+            bobContainer.style.transform = `translate(${x}px, ${y}px)`;
         }
-        
+
         class Brick {
             constructor(x, y, row) {
                 this.x = x;
@@ -112,39 +119,32 @@
             }
         }
 
-        // Create bricks array with positions
+        // Create heart shape
+        function isInHeart(x, y) {
+            const nx = (x - canvas.width/2) / 100;
+            const ny = -(y - canvas.height/2) / 100;
+            const heart = Math.pow(Math.pow(nx, 2) + Math.pow(ny - Math.sqrt(Math.abs(nx)), 2), 0.5);
+            return heart <= 1.3;
+        }
+
+        // Create bricks array
         const bricks = [];
         for (let row = 0; row < canvas.height; row += brickHeight) {
             for (let col = 0; col < canvas.width; col += brickWidth) {
-                const x = col;
-                const y = row;
-                if (isInHeart(x, y)) {
-                    bricks.push(new Brick(x, y, row));
+                if (isInHeart(col, row)) {
+                    bricks.push(new Brick(col, row, row));
                 }
             }
         }
         
-        // Sort bricks for building pattern
+        // Sort bricks from bottom to top
         bricks.sort((a, b) => b.row - a.row);
         
         // Animation variables
         let currentBrick = 0;
-        let buildDelay = 50; // Slower building for better coordination
+        let buildDelay = 50;
         let lastBuildTime = 0;
 
-        // Function to move Bob to brick position
-        function moveBobToBrick(brick) {
-            const canvasBox = canvas.getBoundingClientRect();
-            const containerBox = document.querySelector('.container').getBoundingClientRect();
-            
-            // Calculate position relative to canvas
-            const bobX = canvasBox.left + brick.x - containerBox.left - 75; // Center Bob
-            const bobY = canvasBox.top + brick.y - containerBox.top - 75;
-            
-            // Update Bob's position
-            bobContainer.style.transform = `translate(${bobX}px, ${bobY}px)`;
-        }
-        
         // Animation loop
         function animate(timestamp) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -153,36 +153,28 @@
             if (timestamp - lastBuildTime > buildDelay && currentBrick < bricks.length) {
                 bricks[currentBrick].built = true;
                 
-                // Move Bob to the next brick position
-                if (currentBrick < bricks.length) {
-                    moveBobToBrick(bricks[currentBrick]);
-                }
+                // Move Bob to current brick position
+                moveBobToBrick(bricks[currentBrick]);
                 
                 currentBrick++;
                 lastBuildTime = timestamp;
             }
             
-            // Draw all built bricks
+            // Draw built bricks
             for (let i = 0; i < currentBrick; i++) {
                 bricks[i].draw();
             }
             
-            // Add sparkle effects
-            if (currentBrick > 0) {
-                const sparkleX = bricks[Math.max(0, currentBrick-1)].x;
-                const sparkleY = bricks[Math.max(0, currentBrick-1)].y;
-                drawSparkle(sparkleX, sparkleY, timestamp);
+            // Sparkle effect at current building position
+            if (currentBrick > 0 && currentBrick < bricks.length) {
+                drawSparkle(bricks[currentBrick-1].x, bricks[currentBrick-1].y, timestamp);
             }
             
-            // Add love particles when heart is complete
+            // Celebration effects when complete
             if (currentBrick === bricks.length) {
                 drawLoveParticles(timestamp);
-                // Move Bob to final position
-                const finalPosition = {
-                    x: canvas.width / 2,
-                    y: canvas.height + 50
-                };
-                moveBobToBrick(finalPosition);
+                // Move Bob to final center position
+                moveBobToBrick({x: canvas.width/2, y: canvas.height - 50});
             }
             
             requestAnimationFrame(animate);
@@ -220,14 +212,10 @@
             });
         }
 
-        // Initialize Bob's starting position
+        // Start animation when page loads
         window.addEventListener('load', () => {
-            // Start at the bottom center
-            const startPosition = {
-                x: canvas.width / 2,
-                y: canvas.height + 50
-            };
-            moveBobToBrick(startPosition);
+            // Position Bob at starting position (bottom center)
+            moveBobToBrick({x: canvas.width/2, y: canvas.height + 25});
             // Start animation
             animate(0);
         });
