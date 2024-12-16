@@ -1,0 +1,94 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.heart-container {
+    position: relative;
+    width: 300px;
+    height: 300px;
+}
+
+#legoHeart {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation: buildHeart 5s ease-in-out forwards;
+}
+
+.bob-container {
+    margin-top: 20px;
+    position: relative;
+    width: 150px;
+    height: 150px;
+}
+
+#bob {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    animation: moveBob 5s ease-in-out forwards;
+}
+
+@keyframes buildHeart {
+    0% {
+        opacity: 0;
+    }
+    20% {
+        opacity: 0.2;
+        background-image: url('lego-heart-step1.png');
+    }
+    40% {
+        opacity: 0.4;
+        background-image: url('lego-heart-step2.png');
+    }
+    60% {
+        opacity: 0.6;
+        background-image: url('lego-heart-step3.png');
+    }
+    80% {
+        opacity: 0.8;
+        background-image: url('lego-heart-step4.png');
+    }
+    100% {
+        opacity: 1;
+        background-image: url('lego-heart-step5.png');
+    }
+}
+
+@keyframes moveBob {
+    0% {
+        transform: translateX(100px) translateY(100px);
+    }
+    20% {
+        transform: translateX(80px) translateY(80px);
+    }
+    40% {
+        transform: translateX(60px) translateY(60px);
+    }
+    60% {
+        transform: translateX(40px) translateY(40px);
+    }
+    100% {
+        transform: translateX(20px) translateY(20px);
+    }
+}
