@@ -102,4 +102,43 @@
         <div class="lego-brick brick-13"></div>
         <div class="lego-brick brick-14"></div>
         <div class="lego-brick brick-15"></div>
-        <div
+        <div class="lego-brick brick-16"></div>
+        <div class="lego-brick brick-17"></div>
+        <div class="lego-brick brick-18"></div>
+
+        <!-- Bob -->
+        <img id="bob-builder" src="bob-the-builder.gif" alt="Bob the Builder">
+
+        <!-- Completion Message -->
+        <div class="message">You complete my heart!</div>
+    </div>
+
+    <script>
+        const bricks = document.querySelectorAll('.lego-brick');
+        const bob = document.getElementById('bob-builder');
+        const message = document.querySelector('.message');
+        let currentBrick = 0;
+
+        function buildHeart() {
+            if (currentBrick < bricks.length) {
+                const brick = bricks[currentBrick];
+                brick.style.animationPlayState = 'running';
+
+                // Move Bob to the brick's position
+                bob.style.display = 'block';
+                bob.style.top = brick.style.top;
+                bob.style.left = `${parseInt(brick.style.left) - 10}px`;
+
+                currentBrick++;
+                setTimeout(buildHeart, 600);
+            } else {
+                // Bob hides and message shows
+                bob.style.display = 'none';
+                message.style.animation = 'showMessage 1s forwards';
+            }
+        }
+
+        window.onload = buildHeart;
+    </script>
+</body>
+</html>
